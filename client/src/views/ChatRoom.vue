@@ -42,35 +42,41 @@ const currentComponent = computed(() => {
   width: 100vw;
 }
 
+/* 视频区域 - 改进自适应缩放 */
 .video {
-  flex: 2;
-  width: 100%;
+  flex: 1;
+  min-width: 0; /* 允许视频区域缩小 */
   background: black;
   object-fit: contain;
+  max-height: 100vh; /* 限制最大高度 */
 }
 
+/* 侧边面板 */
 .side-panel {
-  flex: 1;
+  width: 300px;
   display: flex;
   flex-direction: column;
   background: #222;
   color: white;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
+/* 标签页样式 */
 .tabs {
   display: flex;
-  justify-content: space-around;
   background: #333;
+  border-bottom: 1px solid #444;
 }
 
 .tabs button {
   flex: 1;
-  padding: 10px;
+  padding: 12px 10px;
   background: none;
   color: white;
   border: none;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .tabs button.active {
@@ -81,6 +87,36 @@ const currentComponent = computed(() => {
 .panel-content {
   flex: 1;
   overflow-y: auto;
-  padding: 10px;
+  padding: 15px;
+  background-color: #282828;
+}
+
+/* 小屏幕布局调整 */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    height: auto; /* 允许容器高度根据内容调整 */
+    min-height: 100vh; /* 保持最小高度为视口高度 */
+  }
+  
+  .video {
+    height: 50vh; /* 视频占据 50% 视口高度 */
+    max-height: 50vh;
+    width: 100%;
+  }
+  
+  .side-panel {
+    width: 100%;
+    max-height: 50vh;
+    flex-shrink: 0;
+  }
+  
+  .tabs button {
+    padding: 8px 10px;
+  }
+  
+  .panel-content {
+    padding: 10px;
+  }
 }
 </style>
