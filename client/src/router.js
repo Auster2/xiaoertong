@@ -1,8 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import LoginPage from './views/LoginPage.vue'
 import ChatRoom from './views/ChatRoom.vue'
 
-export const routes = [
-  { path: '/', component: ChatRoom }
+const routes = [
+  { path: '/', redirect: '/login' },
+  { path: '/login', component: LoginPage },
+  { path: '/chat', component: ChatRoom }
 ]
 
 const router = createRouter({

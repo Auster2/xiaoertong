@@ -20,11 +20,20 @@ const messages = ref([])
 const msgBox = ref(null)
 
 const sendMessage = () => {
+  const user = localStorage.getItem('username') || '匿名'
   if (input.value.trim()) {
-    socket.emit('chatMessage', input.value)
+    socket.emit('chatMessage', {
+      user,
+      text: input.value.trim()
+    })
     input.value = ''
   }
 }
+
+socket.on('chatMessage', (msg) => {
+  messages.value.push(`${msg.user}: ${msg.text}`)
+})
+
 
 onMounted(() => {
   socket.on('chatMessage', (msg) => {
@@ -37,24 +46,22 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.danmaku-panel {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+.messages {
+  max-height: 60vh;
+  overflow-y: auto;
+  margin-bottom: 10px;
 }
 
-.messages {
-  flex: 1;
-  overflow-y: auto;
-  padding: 10px;
+.message {
+  background: #444;
+  padding: 6px;
+  border-radius: 4px;
+  margin-bottom: 6px;
 }
 
 .input-area {
   display: flex;
   gap: 6px;
-  padding: 10px;
-  border-top: 1px solid #444;
-  background: #222;
 }
 
 input {

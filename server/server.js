@@ -14,17 +14,16 @@ app.use(express.static(path.join(__dirname, "../client/dist")));
 app.use("/video", express.static(path.join(__dirname, "public")));
 
 // WebSocket 弹幕
-io.on("connection", (socket) => {
-  console.log("用户已连接");
+io.on('connection', (socket) => {
+  const ip = socket.handshake.address
+  console.log(`新连接来自 ${ip}`)
 
-  socket.on("chatMessage", (msg) => {
-    io.emit("chatMessage", msg); // 广播弹幕
-  });
+  socket.on('chatMessage', ({ user, text }) => {
+    console.log(`[${ip}] ${user}: ${text}`)
+    io.emit('chatMessage', { user, text })
+  })
+})
 
-  socket.on("disconnect", () => {
-    console.log("用户断开");
-  });
-});
 
 const PORT = 6772;
 server.listen(PORT, () => {
