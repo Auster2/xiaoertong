@@ -52,7 +52,7 @@ const handleDanmakuCreated = (danmakuData) => {
 .container {
   display: flex;
   height: 100vh;
-  width: 100vw;
+  width: 100%;
 }
 
 /* 视频区域 - 改进自适应缩放 */
@@ -60,12 +60,15 @@ const handleDanmakuCreated = (danmakuData) => {
   flex: 1;
   display: flex;
   flex-direction: column;
+  width: auto;
+  min-width: 0;
 }
 
 /* 视频区域 - 改进自适应缩放 */
 .video {
   flex: 1;
   min-width: 0;
+  width: auto;
   /* 允许视频区域缩小 */
   background: black;
   object-fit: contain;

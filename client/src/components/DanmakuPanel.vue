@@ -129,6 +129,7 @@ onMounted(() => {
   flex-direction: column;
   height: 100vh;
   width: 100%;
+  min-width: 300px;
   position: relative;
   box-sizing: border-box;
   background: #000;
