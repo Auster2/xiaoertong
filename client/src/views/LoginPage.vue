@@ -7,15 +7,41 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 const username = ref('')
 const router = useRouter()
 
+// 获取cookie
+const getCookie = (name) => {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop().split(';').shift()
+}
+
+// 设置cookie
+const setCookie = (name, value, days) => {
+  let expires = ''
+  if (days) {
+    const date = new Date()
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000))
+    expires = `; expires=${date.toUTCString()}`
+  }
+  document.cookie = `${name}=${value || ''}${expires}; path=/`
+}
+
+onMounted(() => {
+  const savedUsername = getCookie('username')
+  if (savedUsername) {
+    username.value = savedUsername
+    router.push('/chat')
+  }
+})
+
 const login = () => {
   if (username.value.trim()) {
-    localStorage.setItem('username', username.value.trim())
+    setCookie('username', username.value.trim(), 7) // 保存7天
     router.push('/chat')
   }
 }

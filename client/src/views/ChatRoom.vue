@@ -97,7 +97,7 @@ const handleDanmakuCreated = (danmakuData) => {
 
 .tabs button {
   flex: 1;
-  padding: 12px 10px;
+  /* padding: 12px 10px; */
   background: none;
   color: white;
   border: none;
@@ -113,7 +113,7 @@ const handleDanmakuCreated = (danmakuData) => {
 .panel-content {
   flex: 1;
   overflow-y: auto;
-  padding: 15px;
+  /* padding: 15px; */
   background-color: #282828;
 }
 
@@ -140,12 +140,12 @@ const handleDanmakuCreated = (danmakuData) => {
     flex-shrink: 0;
   }
 
-  .tabs button {
+  /* .tabs button {
     padding: 8px 10px;
   }
 
   .panel-content {
     padding: 10px;
-  }
+  } */
 }
 </style>

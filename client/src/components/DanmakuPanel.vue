@@ -152,7 +152,7 @@ onMounted(() => {
 .message-container {
   display: flex;
   align-items: flex-start;
-  margin-bottom: 16px;
+  /* margin-bottom: 16px; */
   animation: messageSlideIn 0.3s ease-out;
 }
 
@@ -209,59 +209,25 @@ onMounted(() => {
   border-bottom: 6px solid transparent;
 }
 
-/* 输入区域 */
 .input-area {
-  position: fixed;
-  width: 100%;
-  bottom: 0;
-  right: 0; 
   display: flex;
-  gap: 12px;
-  padding: 16px 20px;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
-  box-sizing: border-box;
-  z-index: 1000;
+  gap: 6px;
+  padding: 10px;
+  border-top: 1px solid #444;
+  background: #222;
 }
 
 input {
   flex: 1;
-  padding: 14px 18px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 25px;
-  font-size: 16px;
-  outline: none;
-  box-sizing: border-box;
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
-}
-
-input:focus {
-  border-color: #667eea;
-  background: rgba(255, 255, 255, 0.95);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
-}
-
-input::placeholder {
-  color: rgba(0, 0, 0, 0.5);
+  padding: 6px;
 }
 
 button {
-  padding: 14px 24px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 6px 12px;
+  background: #00aaff;
   color: white;
   border: none;
-  border-radius: 25px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  border-radius: 4px;
 }
 
 button:hover {
@@ -298,12 +264,12 @@ button:active {
   .messages {
     padding: 16px;
     padding-bottom: 120px;
-    margin-top: 80px;
+    /* margin-top: 80px; */
   }
   
-  .message-container {
+  /* .message-container {
     margin-bottom: 12px;
-  }
+  } */
   
   .avatar {
     width: 36px;
@@ -321,7 +287,7 @@ button:active {
     font-size: 11px;
   }
   
-  .input-area {
+  /* .input-area {
     padding: 12px 16px;
     gap: 10px;
   }
@@ -334,7 +300,7 @@ button:active {
   button {
     padding: 12px 20px;
     font-size: 14px;
-  }
+  } */
   
   .danmaku-item {
     font-size: 14px;
@@ -365,7 +331,7 @@ button:active {
     font-size: 13px;
   }
   
-  .input-area {
+  /* .input-area {
     padding: 10px 12px;
     gap: 8px;
   }
@@ -378,10 +344,10 @@ button:active {
     padding: 10px 16px;
     font-size: 13px;
   }
-  
+  */
   .danmaku-item {
     font-size: 13px;
-  }
+  } 
 }
 
 /* 深色模式适配 */
@@ -399,7 +365,7 @@ button:active {
     color: rgba(255, 255, 255, 0.8);
   }
   
-  input {
+  /* input {
     background: rgba(255, 255, 255, 0.9);
     color: #333;
     border-color: rgba(255, 255, 255, 0.3);
@@ -407,6 +373,6 @@ button:active {
   
   input::placeholder {
     color: rgba(0, 0, 0, 0.6);
-  }
+  } */
 }
 </style>

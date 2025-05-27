@@ -1,3 +1,4 @@
+//server.js
 const express = require("express");
 const http = require("http");
 const path = require("path");
@@ -13,6 +14,11 @@ app.use(express.static(path.join(__dirname, "../client/dist")));
 // 视频资源
 app.use("/video", express.static(path.join(__dirname, "public")));
 
+// 添加这个路由配置，处理所有其他请求
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/dist/index.html"))
+})
+
 // WebSocket 弹幕
 io.on('connection', (socket) => {
   const ip = socket.handshake.address
@@ -26,7 +32,6 @@ io.on('connection', (socket) => {
     io.emit('chatMessage', { user, text })
   })
 })
-
 
 const PORT = 6772;
 server.listen(PORT, () => {
