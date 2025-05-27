@@ -1,7 +1,14 @@
 <template>
   <div class="container">
-    <video class="video" controls autoplay :src="videoSrc"></video>
+    <!-- 视频区域 -->
+    <div class="video-container">
+      <video class="video" controls autoplay :src="videoSrc"></video>
 
+      <!-- 弹幕层 - 由DanmakuPanel控制 -->
+      <DanmakuOverlay :danmaku-list="danmakuList" />
+    </div>
+
+    <!-- 侧边面板 -->
     <div class="side-panel">
       <div class="tabs">
         <button @click="tab = 'danmaku'" :class="{ active: tab === 'danmaku' }">弹幕</button>
@@ -10,9 +17,8 @@
       </div>
 
       <keep-alive>
-        <component :is="currentComponent" class="panel-content" />
+        <component :is="currentComponent" class="panel-content" @danmaku-created="handleDanmakuCreated" />
       </keep-alive>
-
     </div>
   </div>
 </template>
@@ -20,11 +26,13 @@
 <script setup>
 import { ref, computed } from 'vue'
 import DanmakuPanel from '../components/DanmakuPanel.vue'
+import DanmakuOverlay from '../components/DanmakuOverlay.vue'
 import FilePanel from '../components/FilePanel.vue'
 import ExplainPanel from '../components/ExplainPanel.vue'
 
 const tab = ref('danmaku')
 const videoSrc = '/video/video.mp4'
+const danmakuList = ref([])
 
 const currentComponent = computed(() => {
   return {
@@ -33,6 +41,11 @@ const currentComponent = computed(() => {
     explain: ExplainPanel
   }[tab.value]
 })
+
+// 处理弹幕创建事件
+const handleDanmakuCreated = (danmakuData) => {
+  danmakuList.value = danmakuData
+}
 </script>
 
 <style scoped>
@@ -43,16 +56,26 @@ const currentComponent = computed(() => {
 }
 
 /* 视频区域 - 改进自适应缩放 */
+.video-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 视频区域 - 改进自适应缩放 */
 .video {
   flex: 1;
-  min-width: 0; /* 允许视频区域缩小 */
+  min-width: 0;
+  /* 允许视频区域缩小 */
   background: black;
   object-fit: contain;
-  max-height: 100vh; /* 限制最大高度 */
+  max-height: 100vh;
+  /* 限制最大高度 */
 }
 
 /* 侧边面板 */
 .side-panel {
+  min-width: 300px;
   width: 300px;
   display: flex;
   flex-direction: column;
@@ -95,26 +118,29 @@ const currentComponent = computed(() => {
 @media (max-width: 768px) {
   .container {
     flex-direction: column;
-    height: auto; /* 允许容器高度根据内容调整 */
-    min-height: 100vh; /* 保持最小高度为视口高度 */
+    height: auto;
+    /* 允许容器高度根据内容调整 */
+    min-height: 100vh;
+    /* 保持最小高度为视口高度 */
   }
-  
+
   .video {
-    height: 50vh; /* 视频占据 50% 视口高度 */
+    height: 50vh;
+    /* 视频占据 50% 视口高度 */
     max-height: 50vh;
     width: 100%;
   }
-  
+
   .side-panel {
     width: 100%;
     max-height: 50vh;
     flex-shrink: 0;
   }
-  
+
   .tabs button {
     padding: 8px 10px;
   }
-  
+
   .panel-content {
     padding: 10px;
   }

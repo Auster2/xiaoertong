@@ -1,22 +1,6 @@
+<!-- DanmakuPanel.vue -->
 <template>
   <div class="danmaku-panel">
-    <!-- 弹幕层 -->
-    <div class="danmaku-layer">
-      <div
-        v-for="danmaku in danmakuList"
-        :key="danmaku.id"
-        class="danmaku-item"
-        :style="{
-          top: danmaku.y + 'px',
-          animationDuration: danmaku.duration + 's',
-          color: danmaku.color
-        }"
-      >
-        <span class="danmaku-user">[{{ danmaku.user }}]</span>
-        {{ danmaku.text }}
-      </div>
-    </div>
-
     <!-- 聊天消息区域 -->
     <div class="messages" ref="msgBox">
       <div v-for="(msg, i) in messages" :key="i" class="message-container">
@@ -49,6 +33,8 @@
 import { ref, onMounted, nextTick } from 'vue'
 import { io } from 'socket.io-client'
 
+const emit = defineEmits(['danmaku-created'])
+
 const socket = io()
 const input = ref('')
 const messages = ref([])
@@ -73,28 +59,33 @@ const getRandomColor = () => {
 const createDanmaku = (user, text) => {
   // 根据屏幕尺寸调整弹幕区域
   const isMobile = window.innerWidth <= 768
-  const maxHeight = isMobile ? 200 : 400 // 手机端限制在上方200px
+  const maxHeight = isMobile ? 200 : 400
   
   const danmaku = {
     id: danmakuId++,
     user,
     text,
-    y: Math.random() * maxHeight + 20, // 随机高度，手机端更靠上
-    duration: Math.random() * 3 + 8, // 8-11秒
+    y: Math.random() * maxHeight + 20,
+    duration: Math.random() * 3 + 8,
     color: getRandomColor()
   }
   
   danmakuList.value.push(danmaku)
+  
+  // 向父组件发送弹幕数据
+  emit('danmaku-created', danmakuList.value)
   
   // 弹幕结束后移除
   setTimeout(() => {
     const index = danmakuList.value.findIndex(d => d.id === danmaku.id)
     if (index > -1) {
       danmakuList.value.splice(index, 1)
+      emit('danmaku-created', danmakuList.value)
     }
   }, danmaku.duration * 1000)
 }
 
+// 发送消息
 const sendMessage = () => {
   const user = localStorage.getItem('username') || '匿名'
   if (input.value.trim()) {
@@ -106,6 +97,7 @@ const sendMessage = () => {
   }
 }
 
+// Socket事件监听
 socket.on('chatMessage', (msg) => {
   // 添加到聊天记录
   messages.value.push(msg)
@@ -143,44 +135,6 @@ onMounted(() => {
   overflow: hidden;
 }
 
-/* 弹幕层 */
-.danmaku-layer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 80px;
-  pointer-events: none;
-  z-index: 10;
-  overflow: hidden;
-}
-
-.danmaku-item {
-  position: absolute;
-  right: -100%;
-  white-space: nowrap;
-  font-size: 16px;
-  font-weight: 500;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-  animation: danmaku-move linear forwards;
-  user-select: none;
-}
-
-.danmaku-user {
-  opacity: 0.8;
-  margin-right: 4px;
-  font-size: 14px;
-}
-
-@keyframes danmaku-move {
-  from {
-    right: -100%;
-  }
-  to {
-    right: 100%;
-  }
-}
-
 /* 聊天消息区域 */
 .messages {
   flex: 1;
@@ -190,8 +144,8 @@ onMounted(() => {
   box-sizing: border-box;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
-  border-radius: 20px 20px 0 0;
-  margin-top: 100px;
+  /* border-radius: 20px 20px 0 0;
+  margin-top: 100px; */
 }
 
 .message-container {
@@ -199,17 +153,6 @@ onMounted(() => {
   align-items: flex-start;
   margin-bottom: 16px;
   animation: messageSlideIn 0.3s ease-out;
-}
-
-@keyframes messageSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .avatar {
@@ -270,8 +213,7 @@ onMounted(() => {
   position: fixed;
   width: 100%;
   bottom: 0;
-  left: 0;
-  right: 0;
+  right: 0; 
   display: flex;
   gap: 12px;
   padding: 16px 20px;
