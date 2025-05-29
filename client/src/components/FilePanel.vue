@@ -1,72 +1,56 @@
 <template>
-  <div class="danmaku-panel">
-    <div class="messages" ref="msgBox">
-      <div v-for="(msg, i) in messages" :key="i" class="message">{{ msg }}</div>
-    </div>
-    <div class="input-area">
-      <input v-model="input" @keyup.enter="sendMessage" placeholder="发送弹幕..." />
-      <button @click="sendMessage">发送</button>
+  <div class="courseware-panel">
+    <div class="files" ref="fileBox">
+      <div v-for="(file, i) in fileList" :key="i" class="file">
+        <a :href="file.url" target="_blank" download>{{ file.name }}</a>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from 'vue'
-import { io } from 'socket.io-client'
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
 
-const socket = io()
-const input = ref('')
-const messages = ref([])
-const msgBox = ref(null)
+const fileList = ref([])
+const fileBox = ref(null)
 
-const sendMessage = () => {
-  if (input.value.trim()) {
-    socket.emit('chatMessage', input.value)
-    input.value = ''
+onMounted(async () => {
+  try {
+    const res = await axios.get('/api/files') // 从后端获取文件列表
+    fileList.value = res.data
+  } catch (err) {
+    console.error('获取文件失败:', err)
   }
-}
-
-onMounted(() => {
-  socket.on('chatMessage', (msg) => {
-    messages.value.push(msg)
-    nextTick(() => {
-      msgBox.value.scrollTop = msgBox.value.scrollHeight
-    })
-  })
 })
 </script>
 
 <style scoped>
-.danmaku-panel {
+.courseware-panel {
   display: flex;
   flex-direction: column;
   height: 100%;
 }
 
-.messages {
+.files {
   flex: 1;
   overflow-y: auto;
   padding: 10px;
+  background: #111;
 }
 
-.input-area {
-  display: flex;
-  gap: 6px;
+.file {
   padding: 10px;
-  border-top: 1px solid #444;
-  background: #222;
+  background: #1e1e1e;
+  color: #fff;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 }
 
-input {
-  flex: 1;
-  padding: 6px;
-}
-
-button {
-  padding: 6px 12px;
-  background: #00aaff;
-  color: white;
-  border: none;
-  border-radius: 4px;
+.file a {
+  color: #00aaff;
+  text-decoration: none;
+  font-weight: bold;
 }
 </style>

@@ -7,12 +7,46 @@ const socketIo = require("socket.io");
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
+const fs = require("fs");
+
+app.use("/files", express.static(path.join(__dirname, "public/files")));
+
+app.get("/api/files", (req, res) => {
+  const filesDir = path.join(__dirname, "public/files");
+  fs.readdir(filesDir, (err, files) => {
+    if (err) {
+      return res.status(500).json({ error: "读取文件失败" });
+    }
+    const result = files.map(filename => ({
+      name: filename,
+      url: `/files/${filename}`
+    }))
+    res.json(result)
+  })
+})
+
+// 读取某个视频目录下的段落文件
+app.get("/api/paragraphs", (req, res) => {
+  const videoId = req.params.videoId;
+  const filePath = path.join(__dirname, "public", "paragraphs.txt");
+
+  fs.readFile(filePath, "utf-8", (err, data) => {
+    if (err) {
+      console.error("读取段落文件失败:", err);
+      return res.status(500).json({ error: "读取段落失败" });
+    }
+
+    const paragraphs = data.split(/\r?\n/).filter(line => line.trim() !== "");
+    res.json(paragraphs);
+  });
+});
+
+// 视频资源
+app.use("/video", express.static(path.join(__dirname, "public")));
 
 // 静态资源（用于前端构建后的页面）
 app.use(express.static(path.join(__dirname, "../client/dist")));
 
-// 视频资源
-app.use("/video", express.static(path.join(__dirname, "public")));
 
 // 添加这个路由配置，处理所有其他请求
 app.get('*', (req, res) => {
