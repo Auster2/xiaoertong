@@ -11,12 +11,16 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+const videoId = route.params.videoId
 
 const textList = ref([])
 
 onMounted(async () => {
   try {
-    const res = await axios.get('/api/paragraphs') // 从服务端获取段落
+    const res = await axios.get(`/api/${videoId}/paragraphs`) // 从服务端获取段落
     textList.value = res.data
   } catch (err) {
     console.error('获取段落失败:', err)

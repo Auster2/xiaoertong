@@ -13,13 +13,14 @@ const routes = [
   { path: '/', redirect: '/login' },
   { path: '/login', component: LoginPage },
   {
-    path: '/chat',
+    path: '/chat/:videoId',
     component: ChatRoom,
+    props: true,
     beforeEnter: (to, from, next) => {
       if (getCookie('username')) {
         next()
       } else {
-        next('/login') // 自动跳转
+        next('/login')
       }
     }
   }

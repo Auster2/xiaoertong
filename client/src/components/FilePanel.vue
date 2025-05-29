@@ -11,13 +11,17 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+const videoId = route.params.videoId
 
 const fileList = ref([])
 const fileBox = ref(null)
 
 onMounted(async () => {
   try {
-    const res = await axios.get('/api/files') // 从后端获取文件列表
+    const res = await axios.get(`/api/${videoId}/files`) // 从后端获取文件列表
     fileList.value = res.data
   } catch (err) {
     console.error('获取文件失败:', err)

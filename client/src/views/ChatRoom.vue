@@ -24,14 +24,20 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import axios from 'axios'
+
 import DanmakuPanel from '../components/DanmakuPanel.vue'
 import DanmakuOverlay from '../components/DanmakuOverlay.vue'
 import FilePanel from '../components/FilePanel.vue'
 import ExplainPanel from '../components/ExplainPanel.vue'
 
+const route = useRoute()
+const videoId = route.params.videoId
+
 const tab = ref('danmaku')
-const videoSrc = '/video/video.mp4'
+const videoSrc = `/${videoId}/video/video.mp4`
 const danmakuList = ref([])
 
 const currentComponent = computed(() => {
