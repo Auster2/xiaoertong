@@ -6,8 +6,8 @@ export default defineConfig({
   plugins: [vue()],
   server: {
     proxy: {
-      '/socket.io': 'http://localhost:6772',
-      '/video': 'http://localhost:6772'
+      '/socket.io': 'http://localhost:1338',
+      '/video': 'http://localhost:1338'
     }
   }
 })

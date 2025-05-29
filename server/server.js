@@ -9,6 +9,16 @@ const server = http.createServer(app);
 const io = socketIo(server);
 const fs = require("fs");
 
+app.get('/api/videos', (req, res) => {
+  const list = [
+    { id: '6ds3c9a88', title: 'ただ君に晴れ', thumbnail: '/6ds3c9a88/video/cover.png' },
+    { id: '4df4we56q', title: 'Heavenly me', thumbnail: '/4df4we56q/video/cover.png' },
+    { id: '6ukjd3w6e', title: 'TED英语听说', thumbnail: '/6ukjd3w6e/video/cover.png' },
+  ]
+  res.json(list)
+})
+
+
 // 读取某个视频目录下的文件列表
 app.get("/api/:videoId/files", (req, res) => {
   const videoId = req.params.videoId;
@@ -74,7 +84,7 @@ io.on('connection', (socket) => {
   })
 })
 
-const PORT = 6772;
+const PORT = 1338;
 server.listen(PORT, () => {
   console.log(`服务器已启动：http://localhost:${PORT}`);
 });

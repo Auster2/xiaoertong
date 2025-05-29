@@ -35,14 +35,14 @@ onMounted(() => {
   const savedUsername = getCookie('username')
   if (savedUsername) {
     username.value = savedUsername
-    router.push('/chat')
+    router.push('/videos')
   }
 })
 
 const login = () => {
   if (username.value.trim()) {
     setCookie('username', username.value.trim(), 7) // 保存7天
-    router.push('/chat')
+    router.push('/videos')
   }
 }
 </script>
