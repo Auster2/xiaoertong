@@ -163,15 +163,20 @@ app.get('*', (req, res) => {
 io.on('connection', (socket) => {
   const ip = socket.handshake.address
   console.log(`新连接来自 ${ip}`)
-  io.emit('chatMessage', {
+
+  // 只发给当前连接的用户
+  socket.emit('chatMessage', {
     user: "管理员",
     text: "系统提示：直播内容及互动评论须严格遵守直播规范，严禁传播违法违规、低俗血暴、吸烟酗酒、造谣诈骗等不良有害信息。如有违规，平台将进行封禁直至永久封停账号哦！注意理性打赏，未成年不提倡大额打赏。请勿轻信平台上各类广告信息，谨防上当受骗。"
-  });
+  })
+
+  // 转发聊天信息给所有人
   socket.on('chatMessage', ({ user, text }) => {
     console.log(`[${ip}] ${user}: ${text}`)
     io.emit('chatMessage', { user, text })
   })
 })
+
 
 const PORT = 1338;
 server.listen(PORT, () => {

@@ -42,6 +42,14 @@ const msgBox = ref(null)
 const danmakuList = ref([])
 let danmakuId = 0
 
+const getCookie = (name) => {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop().split(';').shift()
+}
+
+const user = getCookie('username') || '匿名'
+
 // 生成头像URL
 const getAvatar = (username) => {
   const colors = ['FF6B6B', '4ECDC4', '45B7D1', 'FFA07A', '98D8C8', 'F7DC6F', 'BB8FCE', '85C1E9']
@@ -87,7 +95,6 @@ const createDanmaku = (user, text) => {
 
 // 发送消息
 const sendMessage = () => {
-  const user = localStorage.getItem('username') || '匿名'
   if (input.value.trim()) {
     socket.emit('chatMessage', {
       user,
