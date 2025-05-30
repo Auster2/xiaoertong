@@ -215,11 +215,13 @@ onMounted(() => {
   padding: 10px;
   border-top: 1px solid #444;
   background: #222;
+  width: 20vw;
 }
 
 input {
   flex: 1;
   padding: 6px;
+  font-size: 0.7vw;
 }
 
 button {
@@ -228,6 +230,7 @@ button {
   color: white;
   border: none;
   border-radius: 4px;
+  font-size: 0.7vw;
 }
 
 button:hover {
@@ -287,20 +290,18 @@ button:active {
     font-size: 11px;
   }
   
-  /* .input-area {
-    padding: 12px 16px;
-    gap: 10px;
+  .input-area {
+    width: 97vw;
+    font-size: large;
   }
-  
+
   input {
-    padding: 12px 16px;
-    font-size: 16px;
+    font-size: large;
   }
   
   button {
-    padding: 12px 20px;
-    font-size: 14px;
-  } */
+    font-size: large; 
+  }
   
   .danmaku-item {
     font-size: 14px;

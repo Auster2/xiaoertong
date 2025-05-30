@@ -9,13 +9,102 @@ const server = http.createServer(app);
 const io = socketIo(server);
 const fs = require("fs");
 
+const multer = require("multer")
+const crypto = require("crypto")
+
+const storage = multer.memoryStorage()
+const upload = multer({ storage })
+
+app.post('/api/upload', upload.fields([
+  { name: 'video', maxCount: 1 },
+  { name: 'cover', maxCount: 1 },
+  { name: 'files' }, // 多个文件
+]), (req, res) => {
+  try {
+    const videoId = crypto.randomBytes(4).toString('hex')
+    const videoDir = path.join(__dirname, 'public', videoId)
+    const fileDir = path.join(videoDir, 'files')
+
+    // 创建目录
+    fs.mkdirSync(fileDir, { recursive: true })
+
+    // 保存视频
+    if (req.files.video && req.files.video[0]) {
+      fs.writeFileSync(path.join(videoDir, 'video.mp4'), req.files.video[0].buffer)
+    }
+
+    // 保存封面
+    if (req.files.cover && req.files.cover[0]) {
+      fs.writeFileSync(path.join(videoDir, 'cover.jpg'), req.files.cover[0].buffer)
+    }
+
+    // 保存资料文件
+    if (req.files.files) {
+      req.files.files.forEach(file => {
+        fs.writeFileSync(path.join(fileDir, file.originalname), file.buffer)
+      })
+    }
+
+    // 保存讲解文本
+    const paragraphs = req.body.paragraphs || ''
+    fs.writeFileSync(path.join(videoDir, 'paragraphs.txt'), paragraphs)
+
+    res.json({ success: true, videoId })
+  } catch (err) {
+    console.error('上传失败:', err)
+    res.status(500).json({ error: '上传失败' })
+  }
+})
+
+
 app.get('/api/videos', (req, res) => {
-  const list = [
-    { id: '6ds3c9a88', title: 'ただ君に晴れ', thumbnail: '/6ds3c9a88/video/cover.png' },
-    { id: '4df4we56q', title: 'Heavenly me', thumbnail: '/4df4we56q/video/cover.png' },
-    { id: '6ukjd3w6e', title: 'TED英语听说', thumbnail: '/6ukjd3w6e/video/cover.png' },
-  ]
-  res.json(list)
+  const publicDir = path.join(__dirname, 'public')
+
+  fs.readdir(publicDir, { withFileTypes: true }, (err, entries) => {
+    if (err) {
+      console.error("读取 public 目录失败:", err)
+      return res.status(500).json({ error: "无法读取视频列表" })
+    }
+
+    const videos = entries
+      .filter(entry => entry.isDirectory())
+      .map(dir => {
+        const videoId = dir.name
+        const videoPath = path.join(publicDir, videoId)
+
+        const paragraphPath = path.join(videoPath, 'paragraphs.txt')
+        let title = videoId
+
+        // 判断封面文件
+        let coverFilename = null
+        const jpgPath = path.join(videoPath, 'cover.jpg')
+        const pngPath = path.join(videoPath, 'cover.png')
+        if (fs.existsSync(jpgPath)) {
+          coverFilename = 'cover.jpg'
+        } else if (fs.existsSync(pngPath)) {
+          coverFilename = 'cover.png'
+        }
+
+        try {
+          const content = fs.readFileSync(paragraphPath, 'utf-8')
+          const lines = content.split(/\r?\n/).filter(line => line.trim())
+          if (lines.length > 0) {
+            title = lines[0]
+          }
+        } catch (e) {
+          console.warn(`无法读取 ${videoId}/paragraphs.txt，使用默认标题`)
+        }
+
+        return {
+          id: videoId,
+          title,
+          thumbnail: coverFilename ? `/${videoId}/video/${coverFilename}` : '', // 若找不到封面就返回空字符串
+        }
+      })
+
+
+    res.json(videos)
+  })
 })
 
 

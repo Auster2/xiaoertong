@@ -84,14 +84,15 @@ const handleDanmakuCreated = (danmakuData) => {
 
 /* 侧边面板 */
 .side-panel {
-  min-width: 300px;
-  width: 300px;
+  min-width: 20vw;
+  width: 20vw;
   display: flex;
   flex-direction: column;
   background: #222;
   color: white;
   overflow: hidden;
   flex-shrink: 0;
+  font-size: 1.2vw;
 }
 
 /* 标签页样式 */
@@ -99,6 +100,7 @@ const handleDanmakuCreated = (danmakuData) => {
   display: flex;
   background: #333;
   border-bottom: 1px solid #444;
+  font-size: 1.2vw;
 }
 
 .tabs button {
@@ -109,6 +111,7 @@ const handleDanmakuCreated = (danmakuData) => {
   border: none;
   cursor: pointer;
   transition: background-color 0.3s;
+  font-size: 1.2vw;
 }
 
 .tabs button.active {
@@ -144,14 +147,15 @@ const handleDanmakuCreated = (danmakuData) => {
     width: 100%;
     max-height: 50vh;
     flex-shrink: 0;
+    font-size: large;
   }
 
-  /* .tabs button {
-    padding: 8px 10px;
+  .tabs button {
+    font-size: large;
   }
 
   .panel-content {
-    padding: 10px;
-  } */
+    font-size: large;
+  }
 }
 </style>

@@ -2,7 +2,7 @@
 <template>
   <div class="video-page">
     <div class="video-header">
-      <h2 class="page-title">视频列表</h2>
+      <h2 class="page-title">直播回放</h2>
       <!-- 这里可以添加其他标题内容或按钮 -->
     </div>
     

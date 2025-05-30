@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import LoginPage from './views/LoginPage.vue'
 import ChatRoom from './views/ChatRoom.vue'
 import VideoList from './views/VideoList.vue'
+import UploadPage from './views/UploadPage.vue'
 
 // 添加辅助函数：获取cookie
 const getCookie = (name) => {
@@ -13,6 +14,7 @@ const getCookie = (name) => {
 const routes = [
   { path: '/', redirect: '/login' },
   { path: '/login', component: LoginPage },
+  { path: '/upload', component: UploadPage },
   {
     path: '/videos',
     component: VideoList,
