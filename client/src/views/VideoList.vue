@@ -142,61 +142,44 @@ const avatarUrl = getAvatar(username); // 生成头像URL
 }
 
 /* 响应式设计 */
-@media (max-width: 1400px) {
-  .video-list-side {
-    min-width: 60px;
-  }
-}
-
+/* 中等屏幕（平板） */
 @media (max-width: 1200px) {
   .video-list {
-    justify-content: space-around;
+    justify-content: center;
+    padding: 0 5px;
+    gap: 6px;
   }
   
   .video-list-side {
     display: none;
   }
+  
+  .video-card {
+    width: calc(45% - 6px); /* 两列布局，考虑间距 */
+  }
 }
 
+/* 小屏幕（大手机） */
 @media (max-width: 768px) {
-  .video-header {
-    padding: 40px 0 15px; /* 增加顶部padding */
-  }
-  
-  .page-title {
-    font-size: 20px;
-  }
-  
-  .avatar-container {
-    top: 15px; /* 调整头像位置 */
-  }
-  
   .video-list {
-    margin: 0 10px;
+    padding: 0 4px;
+    gap: 5px;
   }
   
   .video-card {
-    width: 48%;
-    margin: 0 1% 15px;
+    width: calc(45% - 5px);
   }
 }
 
+/* 超小屏幕（手机） */
 @media (max-width: 480px) {
-  .video-header {
-    padding: 35px 0 10px; /* 增加顶部padding */
-  }
-  
-  .page-title {
-    font-size: 18px;
-  }
-
-  .avatar-container {
-    top: 10px; /* 调整头像位置 */
+  .video-list {
+    padding: 0 2px;
+    gap: 4px;
   }
   
   .video-card {
-    width: 48%;
-    margin: 0 1% 15px;
+    width: calc(45% - 4px);
   }
 }
 </style>
