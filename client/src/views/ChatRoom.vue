@@ -1,3 +1,4 @@
+<!-- ChatRoom.vue -->
 <template>
   <div class="container">
     <!-- 用户信息框 -->

@@ -160,11 +160,15 @@ const avatarUrl = getAvatar(username); // 生成头像URL
 
 @media (max-width: 768px) {
   .video-header {
-    padding: 20px 0 15px;
+    padding: 40px 0 15px; /* 增加顶部padding */
   }
   
   .page-title {
     font-size: 20px;
+  }
+  
+  .avatar-container {
+    top: 15px; /* 调整头像位置 */
   }
   
   .video-list {
@@ -172,23 +176,27 @@ const avatarUrl = getAvatar(username); // 生成头像URL
   }
   
   .video-card {
-    width: 48%; /* 每个视频卡片占48%，一排可以放两个 */
-    margin: 0 1% 15px; /* 每个视频卡片之间有1%的间距 */
+    width: 48%;
+    margin: 0 1% 15px;
   }
 }
 
 @media (max-width: 480px) {
   .video-header {
-    padding: 15px 0 10px;
+    padding: 35px 0 10px; /* 增加顶部padding */
   }
   
   .page-title {
     font-size: 18px;
   }
+
+  .avatar-container {
+    top: 10px; /* 调整头像位置 */
+  }
   
   .video-card {
-    width: 48%; /* 保持一排两个的布局 */
-    margin: 0 1% 15px; /* 间距保持一致 */
+    width: 48%;
+    margin: 0 1% 15px;
   }
 }
 </style>

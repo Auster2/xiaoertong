@@ -167,17 +167,27 @@ const validateFile = (file, type) => {
 // 安全地处理文件名编码
 const safeFileName = (fileName) => {
   try {
-    // 尝试修复常见的编码问题
+    // 首先尝试解码可能被错误编码的文件名
     if (fileName.includes('�') || /[\u00C0-\u00FF]/.test(fileName)) {
-      // 如果包含乱码字符，尝试重新编码
-      const bytes = new TextEncoder().encode(fileName)
-      return new TextDecoder('utf-8').decode(bytes)
+      // 尝试常见的编码方式
+      const encodings = ['utf8', 'gbk', 'gb2312', 'big5', 'latin1'];
+      for (const encoding of encodings) {
+        try {
+          const buffer = Buffer.from(fileName, 'binary');
+          const decoded = buffer.toString(encoding);
+          if (!decoded.includes('�')) {
+            return decoded;
+          }
+        } catch (e) {
+          continue;
+        }
+      }
     }
-    return fileName
+    // 如果无法解码，返回原始文件名但清理不安全字符
+    return fileName.replace(/[<>:"/\\|?*\x00-\x1f]/g, '_');
   } catch (error) {
-    console.warn('文件名编码处理失败:', error)
-    // 如果处理失败，返回原文件名
-    return fileName
+    console.warn('文件名编码处理失败:', error);
+    return 'unnamed_file';
   }
 }
 

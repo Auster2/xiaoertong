@@ -274,12 +274,7 @@ button:active {
   .messages {
     padding: 16px;
     padding-bottom: 120px;
-    /* margin-top: 80px; */
   }
-  
-  /* .message-container {
-    margin-bottom: 12px;
-  } */
   
   .avatar {
     width: 36px;
@@ -298,24 +293,26 @@ button:active {
   }
   
   .input-area {
-    width: 97vw;
-    font-size: large;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 12px;
+    box-sizing: border-box;
+    font-size: 16px;
+    background: #333;
+    z-index: 100;
   }
 
   input {
-    font-size: large;
+    font-size: 16px;
+    padding: 10px;
+    flex: 1;
   }
   
   button {
-    font-size: large; 
-  }
-  
-  .danmaku-item {
-    font-size: 14px;
-  }
-  
-  .danmaku-user {
-    font-size: 12px;
+    font-size: 16px;
+    padding: 10px 16px;
   }
 }
 
@@ -323,8 +320,7 @@ button:active {
 @media (max-width: 480px) {
   .messages {
     padding: 12px;
-    padding-bottom: 130px;
-    margin-top: 60px;
+    padding-bottom: 140px; /* 增加底部内边距，避免被输入框遮挡 */
   }
   
   .avatar {
@@ -339,23 +335,19 @@ button:active {
     font-size: 13px;
   }
   
-  /* .input-area {
-    padding: 10px 12px;
-    gap: 8px;
+  .input-area {
+    padding: 10px;
   }
-  
+
   input {
-    padding: 10px 14px;
+    font-size: 14px;
+    padding: 8px;
   }
   
   button {
-    padding: 10px 16px;
-    font-size: 13px;
+    font-size: 14px;
+    padding: 8px 12px;
   }
-  */
-  .danmaku-item {
-    font-size: 13px;
-  } 
 }
 
 /* 深色模式适配 */
