@@ -5,7 +5,7 @@
 目前已实现的功能：
 - 视频播放、发送弹幕、文件下载、显示讲解
 - 视频列表
-- 上传视频(上传的资料可能乱码，还未解决)
+- 上传视频(上传的资料文件名可能乱码，还未解决)
 
 
 ## 端口
@@ -46,7 +46,7 @@ export default defineConfig({
 # 到client目录
 cd ./client
 
-rm package-lock.json
+# rm package-lock.json
 
 # 下载
 npm install
