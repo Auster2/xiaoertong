@@ -1,10 +1,14 @@
 <template>
   <div class="container">
+    <!-- 用户信息框 -->
+    <div class="user-info">
+      <span class="username">{{ username }}</span>
+      <img :src="avatarUrl" class="avatar" alt="头像" />
+    </div>
+
     <!-- 视频区域 -->
     <div class="video-container">
       <video class="video" controls autoplay :src="videoSrc"></video>
-
-      <!-- 弹幕层 - 由DanmakuPanel控制 -->
       <DanmakuOverlay :danmaku-list="danmakuList" />
     </div>
 
@@ -48,6 +52,27 @@ const currentComponent = computed(() => {
   }[tab.value]
 })
 
+// 用户名与头像
+const username = ref('用户')
+const avatarUrl = ref('')
+
+const getAvatar = (username) => {
+  const colors = ['FF6B6B', '4ECDC4', '45B7D1', 'FFA07A', '98D8C8', 'F7DC6F', 'BB8FCE', '85C1E9']
+  const colorIndex = username.charCodeAt(0) % colors.length
+  return `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=${colors[colorIndex]}&color=fff&size=40&rounded=true`
+}
+
+onMounted(async () => {
+  try {
+    const res = await axios.get(`/api/${videoId}/paragraphs`)
+    const firstLine = res.data[0] || '未知用户'
+    username.value = firstLine
+    avatarUrl.value = getAvatar(firstLine)
+  } catch (err) {
+    console.error('获取段落失败:', err)
+  }
+})
+
 // 处理弹幕创建事件
 const handleDanmakuCreated = (danmakuData) => {
   danmakuList.value = danmakuData
@@ -59,9 +84,40 @@ const handleDanmakuCreated = (danmakuData) => {
   display: flex;
   height: 100vh;
   width: 100%;
+  position: relative;
 }
 
-/* 视频区域 - 改进自适应缩放 */
+/* 用户信息框样式 */
+.user-info {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 12px;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  z-index: 10;
+}
+
+.username {
+  margin-right: 8px;
+  color: #fff;
+  font-weight: bold;
+  font-size: 14px;
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+/* 视频区域 */
 .video-container {
   flex: 1;
   display: flex;
@@ -70,16 +126,13 @@ const handleDanmakuCreated = (danmakuData) => {
   min-width: 0;
 }
 
-/* 视频区域 - 改进自适应缩放 */
 .video {
   flex: 1;
   min-width: 0;
   width: auto;
-  /* 允许视频区域缩小 */
   background: black;
   object-fit: contain;
   max-height: 100vh;
-  /* 限制最大高度 */
 }
 
 /* 侧边面板 */
@@ -95,7 +148,6 @@ const handleDanmakuCreated = (danmakuData) => {
   font-size: 1.2vw;
 }
 
-/* 标签页样式 */
 .tabs {
   display: flex;
   background: #333;
@@ -105,7 +157,6 @@ const handleDanmakuCreated = (danmakuData) => {
 
 .tabs button {
   flex: 1;
-  /* padding: 12px 10px; */
   background: none;
   color: white;
   border: none;
@@ -122,23 +173,19 @@ const handleDanmakuCreated = (danmakuData) => {
 .panel-content {
   flex: 1;
   overflow-y: auto;
-  /* padding: 15px; */
   background-color: #282828;
 }
 
-/* 小屏幕布局调整 */
+/* 小屏幕样式 */
 @media (max-width: 768px) {
   .container {
     flex-direction: column;
     height: auto;
-    /* 允许容器高度根据内容调整 */
     min-height: 100vh;
-    /* 保持最小高度为视口高度 */
   }
 
   .video {
     height: 50vh;
-    /* 视频占据 50% 视口高度 */
     max-height: 50vh;
     width: 100%;
   }
@@ -146,7 +193,6 @@ const handleDanmakuCreated = (danmakuData) => {
   .side-panel {
     width: 100%;
     max-height: 50vh;
-    flex-shrink: 0;
     font-size: large;
   }
 
